@@ -48,11 +48,9 @@ class HomeScreen(toga.Box):
         self.add(parameters_box)
     
     def goto_game1(self, widget):
-        print('Goto game1')
         self.on_goto_press('game1')
     
     def goto_game2(self, widget):
-        print('Goto game2')
         self.on_goto_press('game2')
 
 
@@ -87,11 +85,13 @@ class MeowMania(toga.App):
         self.homescreen = HomeScreen(on_goto_press=self.goto)
         self.playscreen = PlayScreen(on_goto_press=self.goto)
 
-        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window = toga.Window(resizable=False)
         self.main_window.content = self.homescreen
         self.main_window.show()
-    
 
+        self.app_size = self.main_window.size  # width, height
+
+    
     def goto(self, whereto):
         match whereto:
             case 'game1':
