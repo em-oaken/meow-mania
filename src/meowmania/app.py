@@ -2,6 +2,8 @@
 Amuse your pet
 """
 
+from random import randint
+
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
@@ -59,23 +61,32 @@ class PlayScreen(toga.Box):
         super().__init__(*args, **kwargs)
         self.on_goto_press = on_goto_press
 
-        self.label = toga.Label('This is play screen')
-
-        self.game_area = toga.Box(
-            style=Pack(padding=5, flex=1, background_color="beige")
-        )
-
         button = toga.Button(
-            text="Go to home screen",
+            text="Back to home screen",
             on_press = self.goto_home,
             style=Pack(padding=5)
         )
 
+        background_img = toga.Image('resources/background1.png')
+        image_view = toga.ImageView(background_img)
+        self.box_background = toga.Box(children=[image_view])
+
+        target = toga.Button(
+            icon=toga.Icon(path='i want the default icon'),
+            on_press=self.on_press_target,
+            style=Pack(background_color='#000000')
+        )
+        self.target_box = toga.Box(children=[target], style=Pack(padding=(-300, 100, 0, 0)))
+
         self.style.update(direction=COLUMN, padding=0)
-        self.add(self.label)
-        self.add(self.game_area)
         self.add(button)
-    
+        self.add(self.box_background)
+        self.add(self.target_box)
+
+    async def on_press_target(self, widget):
+        self.target_box.style.update(padding=(randint(-500, 0), 0, 0, randint(0, 400)))
+        self.playground_size = (self.box_background.layout.width, self.box_background.layout.height)
+
     def goto_home(self, widget):
         self.on_goto_press('home')
 
@@ -96,11 +107,11 @@ class MeowMania(toga.App):
         match whereto:
             case 'game1':
                 self.main_window.content = self.playscreen
-                self.playscreen.label.text = 'Game1'
+                # self.playscreen.label.text = 'Game1'
             
             case 'game2':
                 self.main_window.content = self.playscreen
-                self.playscreen.label.text = 'Game2'
+                # self.playscreen.label.text = 'Game2'
             
             case 'home':
                 self.main_window.content = self.homescreen
