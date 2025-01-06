@@ -67,25 +67,39 @@ class PlayScreen(toga.Box):
             style=Pack(padding=5)
         )
 
-        background_img = toga.Image('resources/background1.png')
-        image_view = toga.ImageView(background_img)
-        self.box_background = toga.Box(children=[image_view])
+        # background_img = toga.Image('resources/background1.png')
+        # image_view = toga.ImageView(background_img)
+        # self.box_background = toga.Box(children=[image_view])
 
-        target = toga.Button(
-            icon=toga.Icon(path='i want the default icon'),
-            on_press=self.on_press_target,
-            style=Pack(background_color='#000000')
+        self.canvas = toga.Canvas(
+            style=Pack(flex=1, background_color='beige'),
+            on_press=self.on_press_canvas,
+            )
+        with self.canvas.context.Stroke(5, 20, color="blue") as stroke:
+            stroke.line_to(500, 250)
+        with self.canvas.context.Fill(color="red") as fill:
+            circle = fill.arc(x=50, y=50, radius=15)
+            rect = fill.rect(x=50, y=50, width=15, height=15)
+        
+        target_img = toga.Image('resources/tiberius-256.png')
+        self.new_box_target = toga.Box(
+            style=Pack(padding=(-100, 0, 0, 100)),
+            children=[toga.ImageView(target_img, style=Pack(height=32))]
         )
-        self.target_box = toga.Box(children=[target], style=Pack(padding=(-300, 100, 0, 0)))
 
         self.style.update(direction=COLUMN, padding=0)
         self.add(button)
-        self.add(self.box_background)
-        self.add(self.target_box)
+        self.add(self.canvas)
+        self.add(self.new_box_target)
+        # self.add(self.box_background)
+        # self.add(self.target_box)
 
-    async def on_press_target(self, widget):
-        self.target_box.style.update(padding=(randint(-500, 0), 0, 0, randint(0, 400)))
-        self.playground_size = (self.box_background.layout.width, self.box_background.layout.height)
+    # async def on_press_target(self, widget):
+    #     self.target_box.style.update(padding=(randint(00, 0), 0, 0, randint(0, 100)))
+    #     # self.playground_size = (self.box_background.layout.width, self.box_background.layout.height)
+    
+    def on_press_canvas(self, widget, x, y):
+        print(f'Canvas pressed @ {x} x {y}')
 
     def goto_home(self, widget):
         self.on_goto_press('home')
